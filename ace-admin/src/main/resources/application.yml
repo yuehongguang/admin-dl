@@ -22,12 +22,12 @@ spring:
             max-active: 20
     datasource:
         name: test
-#        url: jdbc:mysql://123.57.157.44:3306/igrowth_app?useUnicode=true&characterEncoding=UTF8
-#        username: feichina
-#        password: xlgl1004
-        url: jdbc:mysql://127.0.0.1:3306/jby_app?useUnicode=true&characterEncoding=UTF8
-        username: root
-        password: root
+        url: jdbc:mysql://123.57.157.44:3306/igrowth_app?useUnicode=true&characterEncoding=UTF8
+        username: feichina
+        password: xlgl1004
+#        url: jdbc:mysql://127.0.0.1:3306/jby_app?useUnicode=true&characterEncoding=UTF8
+#        username: root
+#        password: root
         # 使用druid数据源
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
