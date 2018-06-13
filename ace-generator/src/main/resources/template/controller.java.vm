@@ -1,0 +1,14 @@
+package ${package}.rest;
+
+import com.github.wxiaoqi.security.common.rest.BaseController;
+import ${package}.admin.biz.${className}Biz;
+import ${package}.admin.entity.${className};
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@RestController
+@RequestMapping("${secondModuleName}")
+public class ${className}Controller extends BaseController<${className}Biz,${className}> {
+
+}

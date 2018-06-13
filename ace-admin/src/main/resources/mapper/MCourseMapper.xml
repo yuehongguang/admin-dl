@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.wxiaoqi.security.admin.mapper.MCourseMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.MCourse" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_status" property="courseStatus" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="remain_times" property="remainTimes" jdbcType="INTEGER" />
+    <result column="all_times" property="allTimes" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="child_id" property="childId" jdbcType="INTEGER" />
+    <result column="parent_phone" property="parentPhone" jdbcType="VARCHAR" />
+    <result column="card_id" property="cardId" jdbcType="BIGINT"/>
+    <result column="card_name" property="cardName" jdbcType="VARCHAR"/>
+    <result column="child_name" property="childName" jdbcType="VARCHAR"/>
+    <result column="course_type" property="courseType" jdbcType="INTEGER"/>
+    <result column="course_lables" property="courseLables" jdbcType="VARCHAR" />
+    <result column="schedule_start_time" property="scheduleStartTime" jdbcType="TIMESTAMP" />
+    <result column="schedule_end_time" property="scheduleEndTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="selectByOrgIdGroupByChildId" resultMap="BaseResultMap">
+    select * from igrowth_m_course m
+    where m.org_id = #{orgId}
+    <if test=" null != parentPhone">
+      AND m.parent_phone LIKE CONCAT(CONCAT('%', #{parentPhone}), '%')
+    </if>
+    <if test=" null != childName">
+      AND m.child_name LIKE CONCAT(CONCAT('%', #{childName}), '%')
+    </if>
+    <if test="childId > 0">
+      and m.child_id = #{childId} order by m.start_time desc
+    </if>
+    <if test="childId == 0">
+      GROUP BY m.child_id order by m.id desc
+    </if>
+      limit #{page}, #{limit}
+  </select>
+  <select id="selectByCourseId" resultMap="BaseResultMap">
+    select m.* from igrowth_m_course m where course_id = #{courseId}
+  </select>
+
+  <select id="findByCourseIdAndChildId" resultMap="BaseResultMap">
+    SELECT g.* from igrowth_m_course g where g.course_id=#{courseId} and g.child_id=#{childId}
+  </select>
+
+  <select id="selectByOrgIdGroupByChildIdCount" resultType="java.lang.Long">
+    select count(*) from
+    (select count(*) from igrowth_m_course m
+      where m.org_id = #{orgId}
+      <if test=" null != parentPhone">
+        AND m.parent_phone LIKE CONCAT(CONCAT('%', #{parentPhone}), '%')
+      </if>
+      <if test=" null != childName">
+        AND m.child_name LIKE CONCAT(CONCAT('%', #{childName}), '%')
+      </if>
+        GROUP BY m.child_id order by m.id desc) igrowth_m_course
+
+  </select>
+
+  <select id="selectByOrgIdAndChildId" resultMap="BaseResultMap">
+    select * from igrowth_m_course m
+    where m.org_id = #{orgId}
+    <if test=" null != parentPhone">
+      AND m.parent_phone LIKE CONCAT(CONCAT('%', #{parentPhone}), '%')
+    </if>
+    <if test=" null != childName">
+      AND m.child_name LIKE CONCAT(CONCAT('%', #{childName}), '%')
+    </if>
+    <if test="childId > 0">
+      and m.child_id = #{childId} order by m.start_time desc
+    </if>
+  </select>
+</mapper>

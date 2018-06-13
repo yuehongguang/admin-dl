@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.wxiaoqi.security.admin.mapper.OrgClassifyMapper">
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.OrgClassify" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="classify_name" property="classifyName" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <select id="getByPid" resultMap="BaseResultMap">
+    select distinct t.* from igrowth_org_classify t where t.id = #{pid}  order by t.id
+  </select>
+
+  <select id="getParent" resultMap="BaseResultMap">
+
+    select id,classify_name,pid from igrowth_org_classify where pid = 0
+
+  </select>
+
+
+  <select id="getList" resultMap="BaseResultMap">
+
+    select id,classify_name,pid from igrowth_org_classify where pid=#{VALUE }
+
+  </select>
+</mapper>

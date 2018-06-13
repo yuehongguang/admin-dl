@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.wxiaoqi.security.admin.mapper.ActivityMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.github.wxiaoqi.security.api.entity.Activity" id="igrowthActivityMap">
+        <result property="id" column="id"/>
+        <result property="activityName" column="activity_name"/>
+        <result property="activityDetail" column="activity_detail"/>
+        <result property="activityShort" column="activity_short"/>
+        <result property="forPeople" column="for_people"/>
+        <result property="activityStatus" column="activity_status"/>
+        <result property="activityUrl" column="activity_url"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="orgId" column="org_id"/>
+    </resultMap>
+    
+   <select id="findByOrgIdAndPage" resultMap="igrowthActivityMap">
+  	SELECT * from igrowth_activity t where t.org_id=#{orgId}
+    <if test=" null != activityShort">
+        AND activity_short LIKE CONCAT(CONCAT('%', #{activityShort}), '%')
+    </if>
+    limit #{page}, #{limit}
+   </select>
+  
+   <select id="findCountByOrgId" resultType="java.lang.Long">
+  	SELECT count(*) from igrowth_activity t where t.org_id=#{orgId}
+  </select>
+
+</mapper>

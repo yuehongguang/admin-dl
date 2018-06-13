@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.MyCircleMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.MyCircle" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="isfocus" property="isfocus" jdbcType="INTEGER" />
+    <result column="circle_id" property="circleId" jdbcType="BIGINT" />
+    <result column="child_id" property="childId" jdbcType="BIGINT" />
+  </resultMap>
+
+
+  <resultMap id="MyCircleVO" type="com.igrowth.app.vo.MyCircleVO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="isfocus" property="isfocus" jdbcType="INTEGER" />
+    <result column="circle_id" property="circleId" jdbcType="BIGINT" />
+    <result column="child_id" property="childId" jdbcType="BIGINT" />
+    <result column="circle_name" property="circleName" jdbcType="VARCHAR" />
+    <result column="circle_icon" property="circleIcon" jdbcType="VARCHAR" />
+    <result column="circle_background" property="circleBackground" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="findMyCircleByChildId" resultMap="MyCircleVO">
+          select m.*,c.* from igrowth_m_circle m,igrowth_circle c where m.child_id = #{childId} and m.circle_id = c.id and m.isfocus = 0
+  </select>
+</mapper>

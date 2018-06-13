@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.wxiaoqi.security.admin.mapper.OrgMapper">
+	<resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Org">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="latitude" property="latitude" jdbcType="DOUBLE" />
+		<result column="longitude" property="longitude" jdbcType="DOUBLE" />
+		<result column="org_address" property="orgAddress" jdbcType="VARCHAR" />
+		<result column="org_lable" property="orgLable" jdbcType="VARCHAR" />
+		<result column="course_lable" property="courseLable" jdbcType="VARCHAR" />
+		<result column="org_name" property="orgName" jdbcType="VARCHAR" />
+		<result column="org_pic" property="orgPic" jdbcType="VARCHAR" />
+		<result column="org_tel" property="orgTel" jdbcType="VARCHAR" />
+		<result column="org_type" property="orgType" jdbcType="BIGINT" />
+		<result column="org_url" property="orgUrl" jdbcType="VARCHAR" />
+		<result column="base_user_id" property="baseUserId" jdbcType="INTEGER" />
+		<result column="org_qrcode_url" property="orgQrcodeUrl"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="OrgVoMap" type="com.github.wxiaoqi.security.api.vo.OrgVo">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="latitude" property="latitude" jdbcType="DOUBLE" />
+		<result column="longitude" property="longitude" jdbcType="DOUBLE" />
+		<result column="org_address" property="orgAddress" jdbcType="VARCHAR" />
+		<result column="org_lable" property="orgLable" jdbcType="VARCHAR" />
+		<result column="course_lable" property="courseLable" jdbcType="VARCHAR" />
+		<result column="org_name" property="orgName" jdbcType="VARCHAR" />
+		<result column="org_pic" property="orgPic" jdbcType="VARCHAR" />
+		<result column="org_cover_img" property="orgCoverImg" jdbcType="VARCHAR" />
+		<result column="org_tel" property="orgTel" jdbcType="VARCHAR" />
+		<result column="org_type" property="orgType" jdbcType="BIGINT" />
+		<result column="org_url" property="orgUrl" jdbcType="VARCHAR" />
+		<result column="base_user_id" property="baseUserId" jdbcType="INTEGER" />
+		<result column="org_qrcode_url" property="orgQrcodeUrl" jdbcType="VARCHAR" />
+		<result column="o_t_id" property="otId" jdbcType="BIGINT" />
+		<result column="o_t_status" property="oTStatus" jdbcType="BIGINT" />
+	</resultMap>
+
+	<select id="selectQrCodeUrlEmpty" resultMap="BaseResultMap">
+		SELECT * from igrowth_org where org_qrcode_url is null
+	</select>
+
+	<select id="findOrgByTeacherIdAndPage" resultMap="OrgVoMap">
+		SELECT  o.*,otr.id as o_t_id,otr.o_t_status from igrowth_org o LEFT JOIN igrowth_org_teacher_relation otr on
+		o.id=otr.org_id where teacher_id = #{teacherId}
+		limit #{page}, #{limit}
+	</select>
+
+	<select id="findOrgByTeacherId" resultType="java.lang.Long">
+		SELECT count(*) from igrowth_org o LEFT JOIN igrowth_org_teacher_relation
+		otr on o.id=otr.org_id where teacher_id = #{teacherId}
+	</select>
+	
+</mapper>

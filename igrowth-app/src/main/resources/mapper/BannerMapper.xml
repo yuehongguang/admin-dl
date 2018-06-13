@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.igrowth.app.mapper.BannerMapper">
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Banner">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="bannertype" jdbcType="VARCHAR" property="bannertype" />
+    <result column="bannerorder" jdbcType="BIGINT" property="bannerorder" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+  </resultMap>
+  
+   <select id="selectByBannertype" resultMap="BaseResultMap">
+    select g.* from igrowth_banner g where g.bannertype=#{typeName}
+  </select>
+  
+</mapper>

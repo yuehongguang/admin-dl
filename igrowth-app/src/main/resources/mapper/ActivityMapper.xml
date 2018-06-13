@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.ActivityMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Activity" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="activity_name" property="activityName" jdbcType="VARCHAR" />
+    <result column="activity_detail" property="activityDetail" jdbcType="VARCHAR" />
+    <result column="activity_short" property="activityShort" jdbcType="VARCHAR" />
+    <result column="activity_status" property="activityStatus" jdbcType="INTEGER" />
+     <result column="activity_url" property="activityUrl" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectActivityByOrgId" resultMap="BaseResultMap">
+    select distinct t.* from igrowth_activity t where t.org_id = #{orgId} order by t.id
+  </select>
+  
+</mapper>

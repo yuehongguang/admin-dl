@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.CourseMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Course" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="course_content" property="courseContent" jdbcType="VARCHAR" />
+    <result column="course_date" property="courseDate" jdbcType="VARCHAR" />
+    <result column="course_lables" property="courseLables" jdbcType="VARCHAR" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="course_num" property="courseNum" jdbcType="INTEGER" />
+    <result column="org_id" property="orgId" jdbcType="BIGINT" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="card_id" property="cardId" jdbcType="BIGINT" />
+    <result column="card_name" property="cardName" jdbcType="VARCHAR" />
+    <result column="teacher_id" property="teacherId" jdbcType="BIGINT" />
+    <result column="teacher_name" property="teacherName" jdbcType="VARCHAR" />
+    <result column="course_itro" property="courseItro" jdbcType="VARCHAR" />
+    <result column="course_max_student" property="courseMaxStudent" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <select id="selectCourseByOrgId" resultMap="BaseResultMap">
+    select distinct t.* from igrowth_course t where t.org_id = #{orgId} order by t.id
+  </select>
+  
+  <select id="getAllCourseLables" resultType="java.lang.String">
+    select distinct t.course_lables from igrowth_course t
+  </select>
+  
+   <select id="findCourseLablesByOrgId" resultType="java.lang.String">
+    SELECT distinct course_lables from  igrowth_course where org_id = #{orgId}
+  </select>
+  
+  <select id="findOrgClassifyIdsByOrgId" resultType="java.lang.Long">
+    select DISTINCT org_classify_id from igrowth_course where org_id = #{orgId}
+  </select>
+  
+</mapper>

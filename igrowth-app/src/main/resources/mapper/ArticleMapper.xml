@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.ArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Article" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="article_title" property="articleTitle" jdbcType="VARCHAR" />
+    <result column="article_content" property="articleContent" jdbcType="VARCHAR" />
+    <result column="up_num" property="upNum" jdbcType="INTEGER" />
+    <result column="down_num" property="downNum" jdbcType="INTEGER" />
+    <result column="article_pics" property="articlePics" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="can_up_down" property="canUpDown" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="update_time" property="updateTime" jdbcType="DATE" />
+    <result column="circle_id" property="circleId" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+  </resultMap>
+
+  <select id="findAllArticleByCircleId" resultMap="ArticleVOMap">
+    select t.*,a.* from igrowth_article t,igrowth_account a where t.account_id=a.id and t.circle_id = #{circleId} and t.status = #{status} order by t.id
+  </select>
+
+
+  <resultMap id="ArticleVOMap" type="com.igrowth.app.vo.ArticleVO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="article_title" property="articleTitle" jdbcType="VARCHAR" />
+    <result column="article_content" property="articleContent" jdbcType="VARCHAR" />
+    <result column="up_num" property="upNum" jdbcType="INTEGER" />
+    <result column="down_num" property="downNum" jdbcType="INTEGER" />
+    <result column="article_pics" property="articlePics" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="can_up_down" property="canUpDown" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="update_time" property="updateTime" jdbcType="DATE" />
+    <result column="circle_id" property="circleId" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+    <association property="account" javaType="com.github.wxiaoqi.security.api.entity.Account">
+        <!--<id column="id" property="id" />-->
+        <result column="account_name" property="accountName" />
+        <result column="account_pic" property="accountPic" />
+        <result column="cellphone" property="cellphone" />
+    </association>
+  </resultMap>
+  <select id="findArticleByPage" resultMap="ArticleVOMap">
+    select t.*,a.* from igrowth_article t,igrowth_account a where t.account_id=a.id and t.status = #{status}
+    <if test="circleId != null">
+      and t.circle_id = #{circleId}
+    </if>
+    order by t.id desc limit #{page}, #{limit}
+  </select>
+  <select id="findArticleById" resultMap="ArticleVOMap">
+    select t.*,a.* from igrowth_article t,igrowth_account a where t.account_id=a.id and t.id = #{articleId}
+  </select>
+  <select id="selectArticleCount" resultType="java.lang.Integer">
+    select count(*) from igrowth_article t where  t.status = #{status}
+    <if test="circleId!=null">
+    	and t.circle_id = #{circleId}
+    </if>
+  </select>
+  
+</mapper>

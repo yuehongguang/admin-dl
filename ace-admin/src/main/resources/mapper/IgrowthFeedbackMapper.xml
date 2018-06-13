@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.wxiaoqi.security.admin.mapper.FeedbackMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.github.wxiaoqi.security.api.entity.Feedback" id="igrowthFeedbackMap">
+        <result property="id" column="id"/>
+        <result property="feedbackTitle" column="feedback_title"/>
+        <result property="feedbackContent" column="feedback_content"/>
+        <result property="feedbackStatus" column="feedback_status"/>
+        <result property="feedbackType" column="feedback_type"/>
+        <result property="feedbackTime" column="feedback_time"/>
+        <result property="feedbackRelpy" column="feedback_relpy"/>
+        <result property="orgId" column="org_id"/>
+        <result property="childId" column="child_id"/>
+        <result property="childName" column="child_name"/>
+        <result property="accountId" column="account_id"/>
+        <result property="mLessonId" column="m_Lesson_id"/>
+        <result property="phone" column="phone"/>
+    </resultMap>
+    
+  <select id="findByOrgIdAndPage" resultMap="igrowthFeedbackMap">
+  	SELECT * from igrowth_feedback t where 1=1
+  	<if test="orgId==null">
+  		and t.org_id is null
+  	</if>
+  	<if test="orgId!=null">
+  		and t.org_id=#{orgId}
+  	</if>
+  	<if test="name!=''">
+  		 and (phone like CONCAT(CONCAT('%', #{name}), '%') or child_name like CONCAT(CONCAT('%', #{name}), '%'))
+  	</if>
+  	 order by feedback_time DESC limit #{page}, #{limit} 
+  </select>
+  
+  <select id="findCountByOrgId" resultType="java.lang.Long">
+  	SELECT count(*) from igrowth_feedback t where 1=1
+  	<if test="orgId==null">
+  		and t.org_id is null
+  	</if>
+  	<if test="orgId!=null">
+  		and t.org_id=#{orgId}
+  	</if>
+  	<if test="name!=''">
+  		 and (phone like CONCAT(CONCAT('%', #{name}), '%') or child_name like CONCAT(CONCAT('%', #{name}), '%'))
+  	</if>
+  </select>
+
+</mapper>

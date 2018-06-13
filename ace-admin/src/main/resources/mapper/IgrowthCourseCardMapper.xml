@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.wxiaoqi.security.admin.mapper.IgrowthCourseCardMapper">
+
+   <resultMap type="com.github.wxiaoqi.security.api.entity.IgrowthCourseCard" id="igrowthCourseCardMap">
+       <result property="id" column="id"/>
+       <result property="cardName" column="card_name"/>
+       <result property="courseNum" column="course_num"/>
+       <result property="validTimeStart" column="valid_time_start"/>
+       <result property="validTimeEnd" column="valid_time_end"/>
+       <result property="price" column="price"/>
+       <result property="inventory" column="inventory"/>
+       <result property="courseId" column="course_id"/>
+       <result property="status" column="status"/>
+       <result property="orgId" column="org_id"/>
+       <result property="orgName" column="org_name"/>
+       <result property="courseLabel" column="course_label"/>
+       <result property="orgId" column="org_id"/>
+       <result property="bindStatus" column="bind_status"/>
+   </resultMap>
+
+  <select id="selectActiveCourseByOrgId" resultMap="igrowthCourseCardMap">
+	SELECT * from igrowth_course_card where id in(
+	SELECT DISTINCT card_id from igrowth_course where id in(
+			SELECT DISTINCT course_id from igrowth_lesson where course_id in(
+			SELECT id from igrowth_course  where org_id = #{orgId}
+	))) and  bind_status = 1 and org_id = #{orgId} order by id desc
+  </select>
+  
+</mapper>

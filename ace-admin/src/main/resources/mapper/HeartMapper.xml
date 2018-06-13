@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.wxiaoqi.security.admin.mapper.HeartMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Heart" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="heart_num" property="heartNum" jdbcType="INTEGER" />
+    <result column="heart_name" property="heartName" jdbcType="VARCHAR" />
+    <result column="heart_time" property="heartTime" jdbcType="TIMESTAMP" />
+    <result column="child_id" property="childId" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>

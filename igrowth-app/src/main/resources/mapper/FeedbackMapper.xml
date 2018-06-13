@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.FeedbackMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Feedback" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="feedback_title" property="feedbackTitle" jdbcType="VARCHAR" />
+    <result column="feedback_content" property="feedbackContent" jdbcType="VARCHAR" />
+    <result column="feedback_status" property="feedbackStatus" jdbcType="INTEGER" />
+    <result column="feedback_time" property="feedbackTime" jdbcType="TIMESTAMP" />
+    <result column="feedback_relpy" property="feedbackRelpy" jdbcType="VARCHAR" />
+    <result column="feedback_type" property="feedbackType" jdbcType="INTEGER" />
+    <result column="account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="child_id" property="childId" jdbcType="INTEGER" />
+    <result column="child_name" property="childName" jdbcType="VARCHAR" />
+    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="m_lesson_id" property="accountId" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+   <select id="findByMlessonIdAndChildId" resultMap="BaseResultMap">
+      SELECT g.* from igrowth_feedback g where g.m_lesson_id=#{mLessonId} and g.child_id=#{childId}
+  </select>
+  
+  
+</mapper>

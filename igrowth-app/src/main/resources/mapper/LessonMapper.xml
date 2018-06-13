@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.LessonMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Lesson" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="teacher_id" property="teacherId" jdbcType="INTEGER" />
+    <result column="teacher_name" property="teacherName" jdbcType="VARCHAR" />
+    <result column="home_work" property="homeWork" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="lesson_status" property="lessonStatus" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="BaseResultVoMap" type="com.igrowth.app.vo.LessonVO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="teacher_id" property="teacherId" jdbcType="INTEGER" />
+    <result column="teacher_name" property="teacherName" jdbcType="VARCHAR" />
+    <result column="home_work" property="homeWork" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="lesson_status" property="lessonStatus" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <select id="findByCourseId" resultMap="BaseResultMap">
+    select distinct t.* from igrowth_lesson t where t.course_id = #{courseId} order by t.id
+  </select>
+  
+  <select id="findMLessonByCourseIdAndDate" resultMap="BaseResultMap">
+    select distinct t.* from igrowth_lesson t where t.course_id = #{courseId} and to_days(start_time) = to_days(#{date}) order by t.id
+  </select>
+  <select id="findByCourseIdAndStatus" resultMap="BaseResultMap">
+    SELECT g.* from igrowth_lesson g where g.course_id=#{courseId} and lessonStatus=#{lessonStatus}
+  </select>
+  
+  <select id="findLessonByDateAndCourseId" resultMap="BaseResultVoMap">
+	 SELECT a.*,ifnull(b.s,0) subnum from igrowth_lesson a LEFT JOIN (
+		SELECT COUNT(lesson_id) s,lesson_id from igrowth_m_lesson
+		where DATE_FORMAT(start_time,'%Y-%m-%d')  = #{date} and lesson_status = 3
+		GROUP BY  DATE_FORMAT(start_time,'%Y-%m-%d'),lesson_id HAVING lesson_id is not null 
+	 ) b on a.id = b.lesson_id
+	 <![CDATA[  where DATE_FORMAT(a.start_time,'%Y-%m-%d') = #{date}  ]]>
+	 AND a.course_id = #{courseId}
+  </select>
+  
+  <select id="findLessonByLessonId" resultMap="BaseResultVoMap">
+	 SELECT a.*,ifnull(b.s,0) subnum from igrowth_lesson a LEFT JOIN (
+		SELECT COUNT(lesson_id) s,lesson_id from igrowth_m_lesson where lesson_status = 3 and lesson_id = #{lessonId}
+	  ) b on a.id = b.lesson_id
+	  where  a.id = #{lessonId}
+  </select>
+  
+</mapper>

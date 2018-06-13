@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.MCourseMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.MCourse" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_status" property="courseStatus" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="remain_times" property="remainTimes" jdbcType="INTEGER" />
+    <result column="all_times" property="allTimes" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="child_id" property="childId" jdbcType="INTEGER" />
+    <result column="course_type" property="courseType" jdbcType="INTEGER" />
+    <result column="course_lables" property="courseLables" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="findByCourseName" resultMap="BaseResultMap">
+     SELECT g.* from igrowth_m_course g where g.course_name=#{courseName}
+  </select>
+  
+  <select id="findByCourseIdAndChildId" resultMap="BaseResultMap">
+     SELECT g.* from igrowth_m_course g where g.course_id=#{courseId} and g.child_id=#{childId}
+  </select>
+  
+</mapper>

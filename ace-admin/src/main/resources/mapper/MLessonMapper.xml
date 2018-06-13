@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.wxiaoqi.security.admin.mapper.MLessonMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.MLesson" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="child_id" property="childId" jdbcType="INTEGER" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="lesson_id" property="lessonId" jdbcType="INTEGER" />
+    <result column="comment_status" property="commentStatus" jdbcType="INTEGER" />
+    <result column="lesson_name" property="lessonName" jdbcType="INTEGER" />
+    <result column="lesson_audio" property="lessonAudio" jdbcType="VARCHAR" />
+    <result column="lesson_video" property="lessonVideo" jdbcType="VARCHAR" />
+    <result column="lesson_behavior" property="lessonBehavior" jdbcType="VARCHAR" />
+    <result column="lesson_imgs" property="lessonImgs" jdbcType="VARCHAR" />
+    <result column="lesson_status" property="lessonStatus" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ChildVoMap" type="com.github.wxiaoqi.security.api.vo.ChildVo" >
+   	<result column="id" property="childId" jdbcType="INTEGER" />
+    <result column="child_name" property="childName" jdbcType="VARCHAR" />
+     <result column="child_pic" property="childPic" jdbcType="VARCHAR" />
+    <result column="lesson_id" property="mlessonId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="MLessionVoMap" type="com.github.wxiaoqi.security.admin.vo.MLessonVo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="child_id" property="childId" jdbcType="INTEGER" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="lesson_id" property="lessonId" jdbcType="INTEGER" />
+    <result column="comment_status" property="commentStatus" jdbcType="INTEGER" />
+    <result column="lesson_name" property="lessonName" jdbcType="INTEGER" />
+    <result column="lesson_audio" property="lessonAudio" jdbcType="VARCHAR" />
+    <result column="lesson_video" property="lessonVideo" jdbcType="VARCHAR" />
+    <result column="lesson_behavior" property="lessonBehavior" jdbcType="VARCHAR" />
+    <result column="lesson_imgs" property="lessonImgs" jdbcType="VARCHAR" />
+    <result column="lesson_status" property="lessonStatus" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="child_name" property="childName" jdbcType="VARCHAR" />
+    <result column="course_type" property="courseType" jdbcType="INTEGER" />
+  </resultMap>
+
+  <select id="findMLessonByDate" resultMap="BaseResultMap">
+    select g.* from igrowth_m_lesson g where g.child_id=#{childId} and g.create_time BETWEEN #{1} AND #{2}
+  </select>
+  
+  <select id="selectByLessonIdAndCommentStatus" resultMap="ChildVoMap">
+    select DISTINCT i.id,i.child_name,i.child_pic,g.id as lesson_id from igrowth_m_lesson g LEFT JOIN igrowth_child i on g.child_id = i.id
+   	 where g.lesson_id=#{lessonId} and g.comment_status=#{commentStatus} and lesson_status=1
+  	limit #{page}, #{limit}
+  </select>
+  
+    <select id="selectByLessonIdAndCommentStatusCount" resultType="java.lang.Integer">
+    select count(*) from igrowth_m_lesson g LEFT JOIN igrowth_child i on g.child_id = i.id
+   	 where g.lesson_id=#{lessonId} and g.comment_status=#{commentStatus} and lesson_status=1
+  </select>
+
+  <select id="findSumGroupByChild" resultType="java.lang.Integer">
+    select count(*) from(SELECT count(*) FROM igrowth_m_lesson WHERE course_id=#{courseId} GROUP BY child_id ) igrowth_m_lesson
+  </select>
+
+
+  <select id="selectByOrgIdAndLessonStatusCount" resultType="java.lang.Integer">
+    select count(*) from igrowth_m_lesson g LEFT JOIN igrowth_child i on g.child_id = i.id
+    where g.org_id=#{orgId} and g.lesson_status=#{lessonStatus}
+    <if test="childName!=null and childName!=''">
+      AND i.child_name LIKE CONCAT(CONCAT('%', #{childName}), '%')
+    </if>
+  </select>
+
+  <select id="selectByOrgIdAndLessonStatus" resultMap="MLessionVoMap">
+    SELECT
+    g.id,
+    g.account_id,
+    g.child_id,
+    g.course_id,
+    g.course_name,
+    g.lesson_id,
+    g.comment_status,
+    g.lesson_name,
+    g.lesson_audio,
+    g.lesson_video,
+    g.lesson_behavior,
+    g.lesson_imgs,
+    g.lesson_status,
+    g.start_time,
+    g.end_time,
+    g.org_id,
+    g.org_name,
+    i.child_name from igrowth_m_lesson g LEFT JOIN igrowth_child i on g.child_id = i.id
+    WHERE g.org_id=#{orgId}
+    <if test="lessonStatus==0">
+     	AND g.lesson_status in (0,2,3)
+    </if>
+    <if test="lessonStatus!=0">
+     	AND g.lesson_status = #{lessonStatus}
+    </if>
+    <if test="childName!=null and childName!=''">
+      AND i.child_name LIKE CONCAT(CONCAT('%', #{childName}), '%')
+    </if>
+    Order BY g.start_time,g.id ASC limit #{page}, #{limit}
+  </select>
+  <update id="updateStatus">
+    update igrowth_m_lesson set lesson_status = #{lessonStatus} where id= #{id}
+  </update>
+  
+  <select id="selectEndMlesson" resultMap="BaseResultMap">
+	 SELECT * from igrowth_m_lesson where lesson_status=3
+	 <![CDATA[ and end_time <= SYSDATE() ]]>
+  </select>
+  
+  <select id="selectEndCommentMlessonByLessonId" resultMap="BaseResultMap">
+	SELECT * from igrowth_m_lesson where lesson_id = #{lessonId} and comment_status = #{commentStatus} and lesson_status=1
+  </select>
+  
+   <select id="selectEndCommentMlessonCountByLessonId" resultType="java.lang.Integer">
+	SELECT count(*) from igrowth_m_lesson where lesson_id = #{lessonId} and comment_status = #{commentStatus} and lesson_status=1
+  </select>
+  
+  
+</mapper>

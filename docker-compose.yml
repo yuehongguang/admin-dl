@@ -1,0 +1,57 @@
+center:
+  image: ag/ace-center
+  ports:
+   - "8761:8761"
+  hostname: center
+redis:
+  image: redis
+  ports:
+   - "6379:6379"
+#admin:
+#  image: ag/ace-admin
+#  ports:
+#   - "8762:8762"
+#  links:
+#   - center
+#   - ace-auth
+igrowth-app:
+  image: ag/igrowth-app
+  ports:
+   - "8799:8799"
+  links:
+   - center
+   - redis
+   - ace-auth
+ace-auth:
+  image: ag/ace-auth-server
+  ports:
+   - "8777:8777"
+  links:
+   - center
+   - redis
+#   - ui
+#ui:
+#  image: ag/ace-ui
+#  ports:
+#   - "8766:8766"
+#  links:
+#  - center
+#   - admin
+gate-way:
+  image: ag/ace-gate-server
+  ports:
+   - "8765:8765"
+  links:
+   - center
+   - redis
+#   - admin
+   - igrowth-app
+   - ace-auth
+#   - ui
+#boot-monitor:
+#  image: ag/ace-monitor
+#  ports:
+#   - "8764:8764"
+#  links:
+#   - center
+

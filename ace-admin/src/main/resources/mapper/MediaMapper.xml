@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.wxiaoqi.security.admin.mapper.MediaMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.admin.entity.Media" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="media_file_name" property="mediaFileName" jdbcType="VARCHAR" />
+    <result column="media_name" property="mediaName" jdbcType="VARCHAR" />
+    <result column="media_path" property="mediaPath" jdbcType="VARCHAR" />
+    <result column="media_size" property="mediaSize" jdbcType="BIGINT" />
+    <result column="media_type" property="mediaType" jdbcType="INTEGER" />
+    <result column="media_url" property="mediaUrl" jdbcType="VARCHAR" />
+    <result column="thumbnail" property="thumbnail" jdbcType="VARCHAR" />
+  </resultMap>
+<!--
+  <insert id="insertMediaAndGetId" useGeneratedKeys="true" keyProperty="id" parameterType="com.github.wxiaoqi.security.admin.entity.Media">
+    insert into bravo_sys_media
+  </insert>-->
+
+  <insert id="insertMediaAndGetId" parameterType="com.github.wxiaoqi.security.admin.entity.Media" useGeneratedKeys="true" keyProperty="id" >
+    insert into bravo_sys_media (media_file_name,media_name,media_path,media_size,media_type,media_url,thumbnail)
+    values(#{mediaFileName},#{mediaName},#{mediaPath},#{mediaSize},#{mediaType},#{mediaUrl},#{thumbnail})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+  
+   <select id="selectByUrl" resultMap="BaseResultMap">
+    select g.* from bravo_sys_media g where g.media_url=#{mediaUrl}
+  </select>
+  
+  
+</mapper>

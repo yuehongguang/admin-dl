@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.GrowthRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.GrowthRecord" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+    <result column="marker_title" property="markerTitle" jdbcType="VARCHAR" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="course_id" property="courseId" jdbcType="BIGINT" />
+    <result column="child_id" property="childId" jdbcType="BIGINT" />
+    <result column="point_type" property="pointType" jdbcType="INTEGER"/>
+    <result column="mlesson_id" property="mlessonId" jdbcType="INTEGER" />
+    <result column="mlesson_name" property="mlessonName" jdbcType="VARCHAR" />
+    <result column="redirect_url" property="redirectUrl" jdbcType="VARCHAR" />
+    <result column="studay_hours" property="studayHours" jdbcType="DOUBLE" />
+    <result column="label" property="label" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="findGrowthRecordByDate" resultMap="BaseResultMap">
+    select g.* from igrowth_record g where g.child_id=#{childId}
+    <![CDATA[   and DATE_FORMAT(g.create_time, '%Y-%m-%d')<=  DATE_FORMAT(#{2}, '%Y-%m-%d')   ]]>
+    <![CDATA[   and DATE_FORMAT(g.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{1}, '%Y-%m-%d')   ]]>
+  </select>
+
+
+  <resultMap id="MarkerInfoVO" type="com.igrowth.app.vo.MarkerInfoVO" >
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+    <result column="marker_title" property="markerTitle" jdbcType="VARCHAR" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="course_id" property="courseId" jdbcType="BIGINT" />
+    <result column="child_id" property="childId" jdbcType="BIGINT" />
+    <result column="child_nickname" property="childNickname" jdbcType="VARCHAR" />
+    <result column="child_pic" property="childPic" jdbcType="VARCHAR" />
+    <result column="mlesson_id" property="mlessonId" jdbcType="INTEGER" />
+    <result column="mlesson_name" property="mlessonName" jdbcType="VARCHAR" />
+    <result column="redirect_url" property="redirectUrl" jdbcType="VARCHAR" />
+    <result column="studay_hours" property="studayHours" jdbcType="DOUBLE" />
+  </resultMap>
+  <select id="findMarkinfoByParam" resultMap="MarkerInfoVO">
+    select g.*,ch.* from igrowth_record g,igrowth_child ch where g.child_id=#{childId} and g.child_id=ch.id and g.course_id=#{courseId}
+    <![CDATA[   and DATE_FORMAT(g.create_time, '%Y-%m-%d')=  DATE_FORMAT(#{2}, '%Y-%m-%d')   ]]>
+  </select>
+  
+  <select id="findCoureSumByChildId" resultType="java.lang.Integer">
+    SELECT count(DISTINCT course_id) from igrowth_record g where g.child_id=#{childId}
+  </select>
+  
+  <select id="findStudyHoursSumByChildId" resultType="java.lang.Double">
+    SELECT sum(studay_hours) from igrowth_record g where g.child_id=#{childId}
+  </select>
+
+
+  <resultMap id="SumObjVO" type="com.igrowth.app.vo.SumObjVO" >
+    <id column="max(id)" property="id" jdbcType="BIGINT" />
+    <result column="label" property="label" jdbcType="VARCHAR" />
+    <result column="max(mlesson_id)" property="mlessonId" jdbcType="INTEGER" />
+    <result column="sum(studay_hours)" property="labelHoursSum" jdbcType="DOUBLE" />
+  </resultMap>
+  <select id="sumLabelInfo" resultMap="SumObjVO">
+    select max(id),label,sum(studay_hours),max(mlesson_id) from igrowth_record where child_id=#{childId} GROUP BY label
+  </select>
+</mapper>

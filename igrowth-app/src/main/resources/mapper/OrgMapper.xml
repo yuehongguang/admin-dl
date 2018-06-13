@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.OrgMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Org" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="org_address" property="orgAddress" jdbcType="VARCHAR" />
+    <result column="org_lable" property="orgLable" jdbcType="VARCHAR" />
+    <result column="course_lable" property="courseLable" jdbcType="VARCHAR" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="org_pic" property="orgPic" jdbcType="VARCHAR" />
+    <result column="org_cover_img" property="orgCoverImg" jdbcType="VARCHAR" />
+    <result column="org_tel" property="orgTel" jdbcType="VARCHAR" />
+    <result column="org_type" property="orgType" jdbcType="BIGINT" />
+    <result column="org_url" property="orgUrl" jdbcType="VARCHAR" />
+    <result column="base_user_id" property="baseUserId" jdbcType="INTEGER" />
+    <result column="org_qrcode_url" property="orgQrcodeUrl" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="getOrgCourseLables" resultType="java.lang.String">
+       SELECT classify_name from igrowth_org1_classify where id in(
+		select org_classify_id from igrowth_course where org_id = #{orgId}
+		)
+  </select>
+  
+</mapper>

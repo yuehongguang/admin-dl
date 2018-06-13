@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.MLessonMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.MLesson" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="child_id" property="childId" jdbcType="INTEGER" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="lesson_id" property="lessonId" jdbcType="INTEGER" />
+    <result column="lesson_name" property="lessonName" jdbcType="INTEGER" />
+    <result column="lesson_audio" property="lessonAudio" jdbcType="VARCHAR" />
+    <result column="lesson_video" property="lessonVideo" jdbcType="VARCHAR" />
+    <result column="lesson_behavior" property="lessonBehavior" jdbcType="VARCHAR" />
+    <result column="lesson_imgs" property="lessonImgs" jdbcType="VARCHAR" />
+    <result column="lesson_point" property="lessonPoint" jdbcType="VARCHAR" />
+    <result column="lesson_homework" property="lessonHomework" jdbcType="VARCHAR" />
+    <result column="lesson_status" property="lessonStatus" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="findMLessonByDate" resultMap="BaseResultMap">
+    select g.* from igrowth_m_lesson g where g.child_id=#{childId} and g.start_time BETWEEN #{1} AND #{2} and g.lesson_status in 
+    <foreach collection="courseStatuss" item="courseStatus" index="index" open="(" separator="," close=")">
+                    #{courseStatus}
+    </foreach>
+  </select>
+
+  <select id="findMLessonByParam" resultMap="BaseResultMap">
+      SELECT g.* from igrowth_m_lesson g where g.org_id=#{orgId} and g.child_id=#{childId} and g.lesson_status in (0,2,3)
+      <![CDATA[   and DATE_FORMAT(g.start_time, '%Y-%m-%d')=  DATE_FORMAT(#{2}, '%Y-%m-%d')   ]]>
+  </select>
+  
+  <select id="findMLessonIdByDateAndCourseId" resultType="java.lang.Long">
+      SELECT g.lesson_id from igrowth_m_lesson g where g.course_id=#{courseId} and g.child_id=#{childId} and lesson_status!=-1
+      <![CDATA[  and DATE_FORMAT(g.start_time, '%Y-%m-%d')=  DATE_FORMAT(#{date}, '%Y-%m-%d')   ]]>
+  </select>
+  
+   <insert id="insertMLessonAndGetId" parameterType="com.github.wxiaoqi.security.api.entity.MLesson" keyProperty="id" useGeneratedKeys="true" >  
+	    insert into igrowth_m_lesson (account_id,child_id,course_id,course_name,lesson_id,comment_status,lesson_name,
+	    							  lesson_audio,lesson_video,lesson_behavior,lesson_imgs,lesson_point,lesson_homework,lesson_status,start_time,
+	    							  end_time,org_id,org_name,note)
+	    values(#{accountId},#{childId},#{courseId},#{courseName},#{lessonId},#{commentStatus},#{lessonName},#{lessonAudio},#{lessonVideo},
+	    							   #{lessonBehavior},#{lessonImgs},#{lessonPoint},#{lessonHomework},#{lessonStatus},#{startTime},
+	    							   #{endTime},#{orgId},#{orgName},#{note})
+   </insert>
+   
+    <select id="findMaxMlessonId" resultType="java.lang.Long">
+       SELECT max(id) from igrowth_m_lesson
+    </select>
+   
+</mapper>

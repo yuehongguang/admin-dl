@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.wxiaoqi.security.admin.mapper.LessonMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Lesson" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="teacher_id" property="teacherId" jdbcType="INTEGER" />
+    <result column="teacher_name" property="teacherName" jdbcType="VARCHAR" />
+    <result column="home_work" property="homeWork" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="lesson_status" property="lessonStatus" jdbcType="INTEGER" />
+    <result column="lesson_name" property="lessonName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="BaseResultVoMap" type="com.github.wxiaoqi.security.admin.vo.LessonVO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="teacher_id" property="teacherId" jdbcType="INTEGER" />
+    <result column="teacher_name" property="teacherName" jdbcType="VARCHAR" />
+    <result column="home_work" property="homeWork" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="lesson_status" property="lessonStatus" jdbcType="INTEGER" />
+    <result column="lesson_name" property="lessonName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="findByCourseId" resultMap="BaseResultMap">
+      SELECT g.* from igrowth_lesson g where g.course_id=#{courseId}  
+  </select>
+  <select id="findByCourseIdAndStatus" resultMap="BaseResultMap">
+    SELECT g.* from igrowth_lesson g where g.course_id=#{courseId} and g.lesson_status=#{lessonStatus}
+  </select>
+
+  <select id="findLessonByLessonId" resultMap="BaseResultVoMap">
+	 SELECT a.*,ifnull(b.s,0) subnum from igrowth_lesson a LEFT JOIN (
+		SELECT COUNT(lesson_id) s,lesson_id from igrowth_m_lesson where lesson_status = 3 and lesson_id = #{lessonId}
+	  ) b on a.id = b.lesson_id
+	  where  a.id = #{lessonId}
+  </select>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.igrowth.app.mapper.CommentMapper" >
+  <resultMap id="BaseResultMap" type="com.github.wxiaoqi.security.api.entity.Comment" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="parent_comment_id" property="parentCommentId" jdbcType="BIGINT" />
+    <result column="article_id" property="articleId" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="comment_date" property="commentDate" jdbcType="DATE" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+
+  <resultMap id="CommentResult" type="com.igrowth.app.vo.CommentVO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="parent_comment_id" property="parentCommentId" jdbcType="BIGINT" />
+    <result column="article_id" property="articleId" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="comment_date" property="commentDate" jdbcType="DATE" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="select_comment">
+        comment.id,comment.account_id,comment.parent_comment_id,
+        comment.article_id,comment.content,comment.comment_date,
+        comment.state
+  </sql>
+  <sql id="select_account">
+        account.account_name,account.account_pic,account.cellphone
+  </sql>
+
+  <select id="findCommentByArticleIdAndParentCommentId" resultMap="CommentResult">
+     select t.* from igrowth_comment t where (t.article_id = #{articleId} and t.parent_comment_id = #{parentCommentId})
+     BETWEEN #{pageStartNum} AND #{pageEndNum}
+  </select>
+</mapper>

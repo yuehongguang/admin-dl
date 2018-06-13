@@ -1,0 +1,29 @@
+# Tomcat
+server:
+    tomcat:
+        max-threads: 10
+        min-spare-threads: 10
+    port: 7777
+
+# mysql
+spring:
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        #url: jdbc:mysql://rdstest.gz.cvte.cn:3306/acs?useUnicode=true&characterEncoding=utf8
+        #username: admin_acs
+        #password: fPBOhOKOiU4=
+        url: jdbc:mysql://123.57.157.44:3306/igrowth_app?useUnicode=true&characterEncoding=UTF8
+        username: feichina
+        password: xlgl1004
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
+    thymeleaf:
+        mode: LEGACYHTML5
+        cache: false
+
+# Mybatis配置
+mybatis:
+    mapperLocations: classpath:mapper/**/*.xml
+
